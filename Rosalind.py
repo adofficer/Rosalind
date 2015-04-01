@@ -1,3 +1,6 @@
+import math
+import timeit
+
 def gc_cont():
     file = open(raw_input("File name? "), "r")
     dummy = file.read()
@@ -99,4 +102,73 @@ def dna_subs():
         if probe_seq == dna_ref_seq[item:item+len(probe_seq)]:
             print item+1,
 
-gc_cont()
+generations = [1,1]
+def mortal_fib(i, j):
+    count = 2
+    while (count < i):
+        if (count < j):
+            generations.append(generations[-2] + generations[-1]) #recurrence relation before rabbits start dying (simply fib seq Fn = Fn-2 + Fn-1)
+        elif (count == j or count == j+1):
+            generations.append((generations[-2] + generations[-1]) - 1)#Fn = Fn-2 + Fn-1 - 1
+        else:
+            generations.append((generations[-2] + generations[-1]) - (generations[-(j+1)])) #Our recurrence relation here is Fn-2 + Fn-1 - Fn-(j+1)
+        count += 1
+    return (generations[-1])
+
+def expect_offspring(AA_AA, AA_Aa, AA_aa, Aa_Aa, Aa_aa, aa_aa):
+    total = (AA_AA+AA_Aa+AA_aa+Aa_Aa+Aa_aa+aa_aa)
+    return 2*(1*AA_AA + 1*AA_Aa + 0.75*Aa_Aa + 1*AA_aa + 0.5*Aa_aa)
+
+
+def mrna(prot_string):
+    possib_codons = { "I":3, "Y":2, "F":2, "L":6, "M":1, "V":4, "S":6, "P":4, "T":4, "A":4, "H":2, "Q":2, "N":2, "K":2, "D":2, "E":2, "C":2, "W":1, "R":6, "G":4 }
+    possib_num = 1
+    for char in str(prot_string):
+        possib_num = (possib_num*possib_codons[char] % 1000000)
+    print (possib_num * 3 % 1000000)
+
+def enum_gene_order(n):
+    if n>1:
+        permute_list = enum_gene_order(n-1)
+        next_permute_list = []
+        for prior_perm in permute_list:
+            for i in range(0, len(prior_perm)+1):
+                new_entry = list(prior_perm)
+                new_entry.insert(i, n)
+                next_permute_list.append(new_entry)
+        permute_list = list(next_permute_list)
+        return permute_list
+    else:
+        return [[1]]
+
+def print_nicely(input_list):
+    for entry in input_list:
+        for i in range(0, len(entry)):
+            print entry[i],
+        print
+
+def cons(dna_dict):
+    for key in dna_dict:
+        len_list = len(dna_dict[key])
+        break
+    a_list = [0 for x in range(0, len_list)]
+    c_list = [0 for x in range(0, len_list)]
+    g_list = [0 for x in range(0, len_list)]
+    t_list = [0 for x in range(0, len_list)]
+    for i in range(0, len_list):
+        for key in dna_dict:
+            if dna_dict[key][i] == "T":
+                t_list[i] += 1
+            if dna_dict[key][i] == "C":
+                c_list[i] += 1
+            if dna_dict[key][i] == "G":
+                g_list[i] += 1
+            if dna_dict[key][i] == "A":
+                a_list[i] += 1
+    print a_list
+    print c_list
+    print g_list
+    print t_list
+
+
+cons(fasta_parse(....))
