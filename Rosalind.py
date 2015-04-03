@@ -172,6 +172,7 @@ def cons(dna_dict):
 
 
 cons(fasta_parse(....))
+
 import math
 import timeit
 
@@ -360,6 +361,7 @@ def shared_motif2(fasta_dict):
     i = 1
     first_string = ""
     second_string = ""
+    motif_list = []
     for key in fasta_dict:
         if i > 2:
             break
@@ -369,20 +371,28 @@ def shared_motif2(fasta_dict):
         else:
             second_string = fasta_dict[key]
             fasta_dict.pop(key, None)
-
     for i in range(0, len(first_string)):
         for j in range(0, len(second_string)):
-            
-    
-    compare these two strings:
-        find the longest common substrings >4
-            store this in a temporary list while iterating
-        define reference list as temporary list
-        temporary list = []
-    for key in dict:
-        find the longest common substrings >4
-            store in a temporary list while iterating
-        define reference list as temporary list
-        temporary list = []
-            
-    
+            if first_string[i] == second_string[j]:
+                overlap_len = 1
+                repeat:
+                    if first_string[i:i+overlap_len] != second_string[j:j+overlap_len]:
+                        break
+                    else:
+                        overlap_len += 1
+                if overlap_len >= 3:
+                    motif_list.append(first_string[i:i+overlap_len-1])
+
+     for key in fasta_dict:
+         for substring in motif_list:
+            revised_motif_list = []
+            for i in range(0, len(substring)):
+                if i > 3 and not is_common_substring2(fasta_dict[key], substring[:i]):
+                    revised_motif_list.append(substring[:i-1])
+        motif_list = list(revised_motif_list)
+    print motif_list
+
+def is_common_substring2(test_string, substring):
+    for i in range(0, len(test_string)-len(substring)):
+        
+
